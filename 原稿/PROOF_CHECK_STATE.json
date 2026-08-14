@@ -1,0 +1,9 @@
+{
+  "status": "WARN",
+  "rounds": 3,
+  "fixed_issue_ids": ["A1", "A2", "A3", "A4", "A5", "A6", "A8", "E1", "E2", "E3", "E4", "F1", "F2", "F3", "F4", "F5"],
+  "open_issue_ids": ["A7"],
+  "counterexamples": {"attempted": 6, "verified": 0},
+  "compilation": "verify_markdown_math.py --strict-warnings PASS (全8章) / toc_check.py PASS",
+  "generated_at": "2026-08-15T00:00:00Z"
+}

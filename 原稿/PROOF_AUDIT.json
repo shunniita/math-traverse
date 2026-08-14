@@ -1,0 +1,63 @@
+{
+  "audit_skill": "proof-checker",
+  "verdict": "WARN",
+  "reason_code": "minor_gaps",
+  "summary": "面積非依存の循環切断とオイラーの等式までの導出鎖は独立レビュー2体を通過(FATAL/CRITICALは全て修復・閉包確認済み)。残存は未執筆章への明示的依存のみ。",
+  "scope": {
+    "paper_root": "原稿",
+    "review_only": false,
+    "options": []
+  },
+  "audited_input_hashes": {
+    "5巻/05_弧長とπ.md": "sha256:54f72f893230fb37764640d3033205d1c8df6f42286b7d028cf217f1d8993c0e",
+    "4巻/11_オイラーの公式と等式.md": "sha256:91b6162d598dd64d6fea8042ead7d75ba4b0903a63d0d018d726bf53594e7eab",
+    "5巻/04_関数の極限と連続性.md": "sha256:9008cb60a3e3660d72d5b7029d1f3142fc0d8e15927f520f487d1e9c6cd61115",
+    "5巻/14_関数列の収束とテイラー展開.md": "sha256:d37a5bd8e83d281215f83cf9261177e4b93b4f10e17c2cc11b71fa3ce9738215",
+    "4巻/10_複素関数への入口.md": "sha256:6ce2eed73a4dbef54ca65b634b7374d7762d1becf59bd4dd784a2b4cfcaa102a",
+    "2巻/07_三角比.md": "sha256:a29bb8d76ff008311e7cde5cff8202567ca438a4cb31bae061849af7d83add88",
+    "4巻/07_三角関数.md": "sha256:b6639caef4ff6aabbd9478d2b40d4c51cdab868f5b969017dd5b4115b795d28a",
+    "4巻/09_関数を多項式で近似する.md": "sha256:ebd31f91e4e9d38dee9b3fb4b78d7596e8388384fc7099c4a43f3c42dd5f9cef"
+  },
+  "reviewer": {
+    "mode": "independent-agent",
+    "model": "claude-fable-5",
+    "fresh_context": true,
+    "limitations": [
+      "cross-model レビューではない(同系モデルの新規コンテキスト2体)",
+      "R3(閉包指摘F1-F5の修復)は executor 検証のみで3ラウンド上限によりレビュア再確認なし",
+      "外部前提(1巻9章・2巻・5巻3章・5巻6章)は未執筆のため無検証で信頼"
+    ]
+  },
+  "generated_at": "2026-08-15T00:00:00Z",
+  "details": {
+    "theorems_audited": 9,
+    "rounds": 3,
+    "issues": [
+      {
+        "id": "A7",
+        "status": "UNCLEAR",
+        "impact": "COSMETIC",
+        "severity": "MINOR",
+        "category": "HIDDEN_ASSUMPTION",
+        "location": "5巻/05_弧長とπ.md:92",
+        "statement": "「面積はどこにもいない」は2巻3章(未執筆)の角の二等分線定理の証明方法に依存する",
+        "note": "目次2巻3章5節に「証明は相似で行う(面積比不可)」の設計制約を記録して緩和。2巻3章執筆時に照合が必要。",
+        "counterexample": {"status": "candidate", "note": "2巻3章が面積比証明を採った場合のみ顕在化"},
+        "affects": [],
+        "repair_strategy": "ADD_REFERENCE",
+        "resolution": "accepted-risk"
+      },
+      {"id": "A1", "status": "INVALID", "impact": "GLOBAL", "severity": "FATAL", "category": "CIRCULAR_DEPENDENCY", "location": "5巻/05_弧長とπ.md:64", "statement": "P(x)の存在根拠が5.5に前方参照され、5.5がP(x)に依存", "note": "補題3を5.2へ切り出しP(x)非依存化。閉包レビューで担保成立を確認。", "counterexample": {"status": "none", "note": ""}, "affects": ["5巻5章5.4-5.6", "4巻11章"], "repair_strategy": "ADD_DERIVATION", "resolution": "fixed"},
+      {"id": "A3", "status": "UNJUSTIFIED", "impact": "GLOBAL", "severity": "CRITICAL", "category": "SCOPE_OVERCLAIM", "location": "5巻/05_弧長とπ.md:64", "statement": "sin/cosの構成が[0,π/2]止まりで一般角供給が未担保", "note": "鏡映+周期でℝへ拡張。閉包レビュー合格。", "counterexample": {"status": "none", "note": ""}, "affects": ["4巻7章", "5巻14章", "4巻11章"], "repair_strategy": "ADD_DERIVATION", "resolution": "fixed"},
+      {"id": "E1", "status": "UNJUSTIFIED", "impact": "GLOBAL", "severity": "CRITICAL", "category": "UNPROVEN_SUBCLAIM", "location": "4巻/11_オイラーの公式と等式.md:50", "statement": "cos π=−1 が未構成の[0,π]弧長パラメータ表示に依存", "note": "A3修復後、参照先を明示。閉包レビュー合格。", "counterexample": {"status": "none", "note": ""}, "affects": ["4巻11章11.3"], "repair_strategy": "ADD_REFERENCE", "resolution": "fixed"},
+      {"id": "E3", "status": "UNJUSTIFIED", "impact": "LOCAL", "severity": "MAJOR", "category": "MISSING_DERIVATION", "location": "4巻/11_オイラーの公式と等式.md:76", "statement": "複素引数のcos·sinを定義なしに代入", "note": "べき級数定義・収束・実数との一致・全複素数での2式成立を明示。閉包レビュー合格(F5の明示化も適用)。", "counterexample": {"status": "none", "note": ""}, "affects": ["4巻11章11.5"], "repair_strategy": "ADD_DERIVATION", "resolution": "fixed"},
+      {"id": "A2", "status": "UNJUSTIFIED", "impact": "LOCAL", "severity": "MAJOR", "category": "HIDDEN_ASSUMPTION", "location": "5巻/05_弧長とπ.md:64", "statement": "IVT適用に必要な実パラメータ付けが無言", "note": "x座標パラメータ付けを明示。", "counterexample": {"status": "none", "note": ""}, "affects": [], "repair_strategy": "ADD_DERIVATION", "resolution": "fixed"},
+      {"id": "A4", "status": "UNJUSTIFIED", "impact": "LOCAL", "severity": "MAJOR", "category": "HIDDEN_ASSUMPTION", "location": "5巻/05_弧長とπ.md:48", "statement": "合同不変性の暗用・四分円=π/2未証明", "note": "明文化しs(0)=π/2を導出。閉包レビューで成立確認。", "counterexample": {"status": "none", "note": ""}, "affects": [], "repair_strategy": "ADD_DERIVATION", "resolution": "fixed"},
+      {"id": "E4", "status": "UNJUSTIFIED", "impact": "GLOBAL", "severity": "CRITICAL", "category": "UNPROVEN_SUBCLAIM", "location": "4巻/11_オイラーの公式と等式.md:25", "statement": "5巻14章の全実数展開がA3に依存(上流継承)", "note": "A3の修復で解消。", "counterexample": {"status": "none", "note": ""}, "affects": [], "repair_strategy": "NONE", "resolution": "fixed"},
+      {"id": "A5", "status": "OVERSTATED", "impact": "COSMETIC", "severity": "MINOR", "category": "LOGICAL_GAP", "location": "5巻/05_弧長とπ.md:52", "statement": "3<π<4の狭義性がsup論法から出ない", "note": "狭義増加の注記+外接八角形で修復。", "counterexample": {"status": "none", "note": ""}, "affects": [], "repair_strategy": "ADD_DERIVATION", "resolution": "fixed"},
+      {"id": "A6", "status": "UNCLEAR", "impact": "LOCAL", "severity": "MINOR", "category": "HIDDEN_ASSUMPTION", "location": "5巻/05_弧長とπ.md:108", "statement": "sin(−x)が未定義のまま偶関数性を使用", "note": "A3の負角定義を参照する形に修正。", "counterexample": {"status": "none", "note": ""}, "affects": [], "repair_strategy": "ADD_REFERENCE", "resolution": "fixed"},
+      {"id": "A8", "status": "UNCLEAR", "impact": "COSMETIC", "severity": "MINOR", "category": "HIDDEN_ASSUMPTION", "location": "5巻/05_弧長とπ.md:19", "statement": "「曲線」「順に結ぶ」の定義域未宣言・半円の退化", "note": "本章の曲線=円弧と宣言、半円未満分割に変更。", "counterexample": {"status": "none", "note": ""}, "affects": [], "repair_strategy": "ADD_DERIVATION", "resolution": "fixed"},
+      {"id": "E2", "status": "UNCLEAR", "impact": "LOCAL", "severity": "MINOR", "category": "REFERENCE_MISMATCH", "location": "4巻/11_オイラーの公式と等式.md:7", "statement": "台帳の借用/前提分類の不整合と5巻6章の記載漏れ", "note": "担保済み借用に統一、5巻6章追記。", "counterexample": {"status": "none", "note": ""}, "affects": [], "repair_strategy": "ADD_REFERENCE", "resolution": "fixed"}
+    ]
+  }
+}
