@@ -1,0 +1,4 @@
+interface:
+  display_name: "Proof Checker"
+  short_description: "Audit mathematical proofs and repair authorized gaps"
+  default_prompt: "Use $proof-checker to rigorously audit this proof and report every unresolved obligation."
