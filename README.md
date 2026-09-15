@@ -69,6 +69,36 @@ python3 tools/toc_check.py 数学書_全巻目次案.md   # Windows は python -
 python3 .claude/skills/bottom-up/scripts/verify_markdown_math.py --strict-warnings 原稿/<巻>/<章>.md
 ```
 
+文章の表現は textlint で確認できます(Node.js と npm が必要):
+
+```sh
+npm ci
+npm run lint:text
+npm run textlint -- "原稿/<巻>/<章>.md"
+```
+
+GitHub Actions の `textlint` ワークフローでも、プルリクエスト・`main` への push・手動実行時に同じチェックを行います。指摘があると CI は失敗します。結果は GitHub の Actions タブまたは PR のチェック欄から確認できます。
+
+[参考記事](https://blog.p1ass.com/posts/textlint-rule-preset-ai-words-ja/)に沿って、`preset-ai-words-ja` で単語・言い回しを、`@textlint-ja/preset-ai-writing` で文章構造を確認します。対象は原稿とルートの Markdown ファイルです。依存パッケージとエージェント用設定のディレクトリは `.textlintignore` で除外しています。
+
+指摘は推敲の候補です。数学用語として必要な表現は文脈を確認して判断してください。同じ単語を常に許可する場合は、`.textlintrc.json` の `preset-ai-words-ja` を次のように設定できます:
+
+```json
+"preset-ai-words-ja": {
+  "no-ai-words": {
+    "allows": ["経路"]
+  }
+}
+```
+
+特定の範囲だけ単語の指摘を抑える場合は、コメントで囲みます:
+
+```markdown
+<!-- textlint-disable ai-words-ja/no-ai-words -->
+この範囲では、文脈上必要な表現をそのまま使います。
+<!-- textlint-enable ai-words-ja/no-ai-words -->
+```
+
 ## ライセンス
 
 未定(TODO: 公開方針が決まったら選定)。
